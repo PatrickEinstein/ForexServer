@@ -19,15 +19,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(upload.any()); //THIS IS MULTER JUST IN CASE I WILL BE NEEDING IT
 const io = new Server(8050, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST", "PUT"],
-    },
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT"],
+  },
+});
+app.get("/", (req, res) => {
+  res.json("WELCOME");
 });
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerconfig));
 app.get("/api/docs.json", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(swaggerconfig);
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerconfig);
 });
 app.use("/", CreateAnalysisRouter);
 app.use("/", CreateForumRouter);
