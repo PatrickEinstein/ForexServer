@@ -29,6 +29,9 @@ app.get("/api/docs.json", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     res.send(swaggerconfig);
 });
+app.get("/", (req, res) => {
+    res.json("WELCOME");
+});
 app.use("/", CreateAnalysisRouter);
 app.use("/", CreateForumRouter);
 app.use("/", CreateReplyRouter);
