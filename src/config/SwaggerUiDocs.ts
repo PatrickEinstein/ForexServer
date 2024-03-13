@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
-const directoryPath = `${path.join(__dirname, "..", "routes").slice(1)}\\*.js`;
+const directoryPath = `${path.join(__dirname, "..", "Routes").slice(1)}\\*.js`;
 const decodedpath = decodeURIComponent(directoryPath);
 // console.log(decodedpath);
 
@@ -11,14 +11,14 @@ const options = {
   definition: {
     openapi: "3.0.3",
     info: {
-      title: "MINDFULNESS API",
+      title: "Web Pips",
       version: "1.7.1",
-      description: "Mindfulness API",
-      contact:{
+      description: "Web Pips",
+      contact: {
         name: "Patrick",
-        url:"folio.vercel.app",
-        email:"mohammedola1234@gmail.com",
-      }
+        url: "https://www.folio11.vercel.app",
+        email: "mohammedola1234@gmail.com",
+      },
     },
     servers: [
       {
