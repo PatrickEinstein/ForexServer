@@ -1,0 +1,70 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Form</title>
+    <style>
+      /* Add any custom styles for your form */
+    </style>
+  </head>
+  <body>
+    <form action="/api/stripe/create" method="post" id="payment-form">
+      <div class="form-row">
+        <label for="card-element"> Credit or debit card </label>
+        <div id="card-element">
+          <!-- A Stripe Element will be inserted here. -->
+        </div>
+
+        <!-- Used to display Element errors. -->
+        <div id="card-errors" role="alert"></div>
+      </div>
+
+      <button>Submit Payment</button>
+    </form>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      const stripe = Stripe(
+        "sk_test_51MZeP8DHCcXqLDApdPKP4NJ6n4oTwijOBXNzHTqabrxNgVvWhdU5wcWouGMcnKvBbwqgSY6BvAnUbebXjydvmd2o00cqdwmDsask_test_51OwPAMK45KhpmomBXC5EUYCBb9xJ8YT4lVZBlLNmQ0vKJfv5OoivlGBObeS8XVcBUxRcL4ICo7QVfw7PUCq1JvLf00HOvD7XWs"
+      );
+
+      // Create Stripe Elements for card input
+      const elements = stripe.elements();
+      const cardElement = elements.create("card");
+      const cardNumberElement = elements.create("cardNumber");
+      const cardExpiryElement = elements.create("cardExpiry");
+      const cardCvcElement = elements.create("cardCvc");
+
+      // Mount the card Elements to the DOM
+      cardElement.mount("#card-element");
+      cardNumberElement.mount("#card-number-element");
+      cardExpiryElement.mount("#card-expiry-element");
+      cardCvcElement.mount("#card-cvc-element");
+
+      // Handle form submission
+      const form = document.getElementById("payment-form");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        console.log(cardElement);
+        const { token, error } = await stripe.createToken(cardElement);
+
+
+        if (error) {
+          const errorElement = document.getElementById("card-errors");
+          errorElement.textContent = error.message;
+        } else {
+          const hiddenInput = document.createElement("input");
+          hiddenInput.setAttribute("type", "hidden");
+          hiddenInput.setAttribute("name", "token");
+          hiddenInput.setAttribute("value", token.id);
+
+          form.appendChild(hiddenInput);
+          form.submit();
+        }
+      });
+    </script>
+  </body>
+</html>

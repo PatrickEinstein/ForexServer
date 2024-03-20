@@ -1,9 +1,10 @@
 import swaggerJSDoc from "swagger-jsdoc";
 import path from "path";
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
-const directoryPath = `${path.join(__dirname, "..", "Routes").slice(1)}\\*.js`;
+// const directoryPathLinux = `${path.join(__dirname, "..", "Routes").slice(1)}\*.js`;
+const directoryPath = `${path.join(__dirname, "..", "Routes").slice(1)}/*.js`;
 const decodedpath = decodeURIComponent(directoryPath);
-// console.log(decodedpath);
+// console.log(`SWAGGER_LINUX:PATH--->`,directoryPathLinux)
 const options = {
     definition: {
         openapi: "3.0.3",
