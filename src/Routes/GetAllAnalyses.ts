@@ -5,7 +5,7 @@ const getAllAnalysesRouter = express.Router();
 
 /**
  * @openapi
- * '/api/analyses/getAllAnalyses/{page}/{pageSize}':
+ * '/api/resources/getAllAnalyses/{page}/{pageSize}':
  *   get:
  *     tags:
  *       - Resources
@@ -35,7 +35,7 @@ const getAllAnalysesRouter = express.Router();
  */
 
 getAllAnalysesRouter.get(
-  "/api/analyses/getAllAnalyses/:page/:pageSize",
+  "/api/resources/getAllAnalyses/:page/:pageSize",
   getAllAnalyses
 );
 

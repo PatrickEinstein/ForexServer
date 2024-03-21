@@ -1,12 +1,12 @@
 import { RequestHandler } from "express";
-import AnalysisModel from "../Models/Analysis.js";
+import VideoModel from "../Models/Video.js";
 
-const getAllAnalyses: RequestHandler = async (req, res) => {
+const getAllVideos: RequestHandler = async (req, res) => {
   try {
     const page: number = parseInt(req.params.page as string, 10) || 1;
     const pageSize: number = parseInt(req.params.pageSize as string, 10) || 10;
     const skip: number = (page - 1) * pageSize;
-    const allAnalyses = await AnalysisModel.find({})
+    const allAnalyses = await VideoModel.find({})
       .skip(skip)
       .limit(pageSize)
       .sort({ createdAt: -1 });
@@ -22,4 +22,4 @@ const getAllAnalyses: RequestHandler = async (req, res) => {
   }
 };
 
-export default getAllAnalyses;
+export default getAllVideos;

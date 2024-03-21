@@ -14,7 +14,7 @@ let CreateVideoRouter = express.Router();
  *       requestBody:
  *         required: true
  *         content:
- *           application/json:
+ *           multipart/form-data:
  *             schema:
  *               type: object
  *               properties:

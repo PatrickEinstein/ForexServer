@@ -1,15 +1,14 @@
 import express from "express";
-import createPaymentPayPal from "../controller/PayPal/createPaymentPayPal.js";
+import createPaymentStripeEditable from "../controller/Stripe/createPaymentStripeEditable.js";
 
-let paywithPayPalCreateRouter = express.Router();
-
+const paywithStripeEditableCreateRouter = express.Router();
 /**
  * @openapi
- * '/api/paypal/create':
+ * '/api/stripe/createEditable':
  *   post:
  *     tags:
  *       - Payment
- *     summary: initiate PAYPAL Payment
+ *     summary: pay with STRIPE HOSTED-CHECKOUT ---- NOTE THIS ENDPOINT IS NOT FOR YOU
  *     requestBody:
  *       required: true
  *       content:
@@ -20,16 +19,12 @@ let paywithPayPalCreateRouter = express.Router();
  *               amount:
  *                 type: number
  *                 description: The amount of the payment.
- *               currency:
+ *               token:
  *                 type: string
- *                 description: The currency of the payment (e.g., USD, EUR).
- *               description:
- *                 type: string
- *                 description: A description of the payment.
+ *                 description: The token representing the payment source.
  *             required:
  *               - amount
- *               - currency
- *               - description
+ *               - token
  *     responses:
  *       '200':
  *         description: Payment processed successfully.
@@ -39,6 +34,9 @@ let paywithPayPalCreateRouter = express.Router();
  *         description: Internal server error. Failed to process payment.
  */
 
-paywithPayPalCreateRouter.post("/api/paypal/create", createPaymentPayPal);
+paywithStripeEditableCreateRouter.post(
+  "/api/stripe/createEditable",
+  createPaymentStripeEditable
+);
 
-export default paywithPayPalCreateRouter;
+export default paywithStripeEditableCreateRouter;

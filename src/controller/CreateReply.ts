@@ -10,19 +10,19 @@ interface RequestTyping {
 
 const UploadReply: RequestHandler = async (req, res, next) => {
   const { forumId, author, content }: RequestTyping = req.body;
-  if (!req.files || req.files.length === 0 || !forumId || !author || !content) {
+  if (!req.files || !forumId || !author || !content) {
     return res.status(400).json({
       status: false,
       message: "a reply must contain forumId, author, and an content",
     });
   }
-  const imageUrl = await uploadResources(req.files[0].path, "News");
+  const imageUrl = await uploadResources(req?.files[0]?.path, "News");
 
   try {
     const newReply = await new ReplyModel({
       forumId,
       author,
-      picture:imageUrl,
+      picture: imageUrl,
       content,
     });
     await newReply.save();

@@ -5,9 +5,11 @@ import LoginToPelPayService from "./LoginToPelpay.js";
 
 const CardPaymentPelPay: RequestHandler = async (req, res, next) => {
   try {
+    // console.log(`REQBODY::`,req.body);
     const Token = await LoginToPelPayService();
-    const adviceRef = await GeneratePaymentAdvice(req.body, Token);
-
+    // console.log(`Token::`,Token);
+    const adviceRef = await GeneratePaymentAdvice(req.body, Token.access_token);
+    console.log(`adviceRef::`,adviceRef);
     const payload = req.body as CardPayment;
     const response = await fetch(
       `${process.env.Payment_Base_Url}/Payment/process/card/${adviceRef}`,

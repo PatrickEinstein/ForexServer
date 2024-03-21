@@ -8,11 +8,12 @@ const UploadForum = async (req, res, next) => {
             message: "a post must contain title, description, and an image",
         });
     }
-    const imageUrl = await uploadResources(req.files[0].path, "Forum");
+    const imageUrl = await uploadResources(req?.files[0]?.path, "Forum");
     try {
         const newForum = await new ForumModel({
             title,
             picture: imageUrl,
+            description
         });
         await newForum.save();
         res.status(201).json({

@@ -5,11 +5,11 @@ let paywithPelPayRouter = express.Router();
 /**
  * @openapi
  * paths:
- *   /api/Pay:
+ *   /api/PelPay:
  *     post:
  *       tags:
  *         - Payment
- *       summary: Create a new payment
+ *       summary: pay with PELPAY
  *       requestBody:
  *         required: true
  *         content:
@@ -84,6 +84,6 @@ let paywithPelPayRouter = express.Router();
  *           description: Internal server error
  */
 
-paywithPelPayRouter.post("/api/Pay", CardPaymentPelPay);
+paywithPelPayRouter.post("/api/PelPay", CardPaymentPelPay);
 
 export default paywithPelPayRouter;

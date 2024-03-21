@@ -6,7 +6,10 @@ const ForumSchema = new mongoose.Schema({
     },
     picture: {
         type: String,
-        required: true,
+        // required: true,
+    },
+    description: {
+        type: String,
     },
 }, {
     timestamps: true,

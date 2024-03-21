@@ -4,24 +4,7 @@ dotenv.config();
 const stripeClient = new stripe("sk_test_51OwPAMK45KhpmomBXC5EUYCBb9xJ8YT4lVZBlLNmQ0vKJfv5OoivlGBObeS8XVcBUxRcL4ICo7QVfw7PUCq1JvLf00HOvD7XWs");
 const createPaymentStripe = async (req, res) => {
     try {
-        ////////////////////////////////////////////////////////////////////////
-        // FOR HOSTED CHECKOUT IN BACKEND
-        // console.log(req.body);
-        // const { amount, token } = req.body;
-        // const charge = await stripeClient.charges.create({
-        //   amount,
-        //   currency: "usd",
-        //   source: token,
-        //   description: "Charge for test@example.com",
-        // });
-        // res.json({
-        //   charge: charge,
-        // });
-        ////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////
-        // FOR INTEGRATION WITH REACT FRONTEND
         const { name, productOwner, description, price, quantity } = req.body;
-        console.log(`requestBody`, req.body);
         const session = await stripeClient.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: [
@@ -37,12 +20,13 @@ const createPaymentStripe = async (req, res) => {
                 },
             ],
             mode: "payment",
-            success_url: "http://localhost:5173/success",
-            cancel_url: "http://localhost:5173/cancel",
+            success_url: "http://localhost:5173/success", //this will be a frontend page
+            cancel_url: "http://localhost:5173/cancel", //this will be a frontend page
         });
-        console.log(`STRIPE`, session);
-        res.json({ id: session.id });
-        /////////////////////////////////////////////////////////////////////
+        // console.log(`STRIPE`, session)
+        const { url } = session;
+        // res.json({ id: session.id });
+        res.redirect(url ?? "");
     }
     catch (error) {
         console.error("Error processing payment:", error.message);

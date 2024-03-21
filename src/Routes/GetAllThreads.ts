@@ -1,13 +1,16 @@
 import express from "express";
-import getAllAnalyses from "../controller/GetAllAnalyses.js";
-const getAllAnalysesRouter = express.Router();
+import getAllThreads from "../controller/GetAllThread.js";
+
+
+const getAllThreadsRouter = express.Router();
+
 /**
  * @openapi
- * '/api/resources/getAllAnalyses/{page}/{pageSize}':
+ * '/api/resources/getAllThreads/{page}/{pageSize}':
  *   get:
  *     tags:
  *       - Resources
- *     summary: This Endpoint to get all analyses
+ *     summary: This Endpoint to get all threads
  *     parameters:
  *       - in: path
  *         name: page
@@ -31,5 +34,10 @@ const getAllAnalysesRouter = express.Router();
  *       400:
  *         description: Bad request
  */
-getAllAnalysesRouter.get("/api/resources/getAllAnalyses/:page/:pageSize", getAllAnalyses);
-export default getAllAnalysesRouter;
+
+getAllThreadsRouter.get(
+  "/api/resources/getAllThreads/:page/:pageSize",
+  getAllThreads
+);
+
+export default getAllThreadsRouter;

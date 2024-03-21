@@ -15,9 +15,11 @@ const ForumSchema: Schema<IForum> = new mongoose.Schema(
     },
     picture: {
       type: String,
-      required: true,
+      // required: true,
     },
-
+    description: {
+      type: String,
+    },
   },
   {
     timestamps: true,

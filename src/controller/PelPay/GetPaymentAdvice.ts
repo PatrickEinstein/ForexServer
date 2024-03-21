@@ -1,12 +1,12 @@
-
 import { PaymentAdvise } from "../../Models/PelPayModels";
-
+import dotenv from "dotenv";
+dotenv.config();
 const GeneratePaymentAdvice = async (
   PaymentAdvise: PaymentAdvise,
   Token: string
 ) => {
   const response = await fetch(
-    `${process.env.Payment_Base_Url}/Payment/advice`,
+    "https://api.pelpay.ng/Payment/advice",
     {
       method: "POST",
       headers: {

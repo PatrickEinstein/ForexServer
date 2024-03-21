@@ -11,13 +11,13 @@ interface RequestTyping {
 
 const UploadNews: RequestHandler = async (req, res, next) => {
   const { title, note, description}: RequestTyping = req.body;
-  if (!req.files || req.files.length === 0 || !title || !note || !description) {
+  if (!req.files || !title || !note || !description) {
     return res.status(400).json({
       status: false,
       message: "a post must contain title, description, and an image",
     });
   }
-  const imageUrl = await uploadResources(req.files[0].path, "News");
+  const imageUrl = await uploadResources(req?.files[0]?.path, "News");
   try {
     const newNews = await new NewsModel({
       title,
@@ -28,7 +28,7 @@ const UploadNews: RequestHandler = async (req, res, next) => {
     await newNews.save();
     res.status(201).json({
       status: true,
-      message: "A new News was created",
+      message: "A new NEWS was created",
     });
   } catch (e: any) {
     res.status(404).json({

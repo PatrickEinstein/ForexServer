@@ -1,10 +1,10 @@
-import AnalysisModel from "../Models/Analysis.js";
-const getAllAnalyses = async (req, res) => {
+import NewsModel from "../Models/News.js";
+const getAllNews = async (req, res) => {
     try {
         const page = parseInt(req.params.page, 10) || 1;
         const pageSize = parseInt(req.params.pageSize, 10) || 10;
         const skip = (page - 1) * pageSize;
-        const allAnalyses = await AnalysisModel.find({})
+        const allAnalyses = await NewsModel.find({})
             .skip(skip)
             .limit(pageSize)
             .sort({ createdAt: -1 });
@@ -20,4 +20,4 @@ const getAllAnalyses = async (req, res) => {
         });
     }
 };
-export default getAllAnalyses;
+export default getAllNews;

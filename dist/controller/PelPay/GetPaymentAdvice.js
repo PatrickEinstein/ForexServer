@@ -1,5 +1,7 @@
+import dotenv from "dotenv";
+dotenv.config();
 const GeneratePaymentAdvice = async (PaymentAdvise, Token) => {
-    const response = await fetch(`${process.env.Payment_Base_Url}/Payment/advice`, {
+    const response = await fetch("https://api.pelpay.ng/Payment/advice", {
         method: "POST",
         headers: {
             Authorization: `Bearer ${Token}`,

@@ -1,13 +1,13 @@
 import express from "express";
-import getAllAnalyses from "../controller/GetAllAnalyses.js";
-const getAllAnalysesRouter = express.Router();
+import getAllVideos from "../controller/GetAllVideos.js";
+const getAllVideosRouter = express.Router();
 /**
  * @openapi
- * '/api/resources/getAllAnalyses/{page}/{pageSize}':
+ * '/api/resources/getAllVideos/{page}/{pageSize}':
  *   get:
  *     tags:
  *       - Resources
- *     summary: This Endpoint to get all analyses
+ *     summary: This Endpoint to get all videos
  *     parameters:
  *       - in: path
  *         name: page
@@ -31,5 +31,5 @@ const getAllAnalysesRouter = express.Router();
  *       400:
  *         description: Bad request
  */
-getAllAnalysesRouter.get("/api/resources/getAllAnalyses/:page/:pageSize", getAllAnalyses);
-export default getAllAnalysesRouter;
+getAllVideosRouter.get("/api/resources/getAllVideos/:page/:pageSize", getAllVideos);
+export default getAllVideosRouter;
