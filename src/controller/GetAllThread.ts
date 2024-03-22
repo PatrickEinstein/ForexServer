@@ -17,6 +17,7 @@ const getAllThreads: RequestHandler = async (req, res) => {
       return {
         forum,
         replies,
+        repliesNumber:replies.length
       };
     });
     const foundRepliesAndForums = await Promise.all(replyPromises);
