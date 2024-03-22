@@ -13,16 +13,16 @@ export interface Customer {
 
 export interface PaymentAdvise {
   amount: number;
-  currency: string;
+  currency: string ;
   merchantRef: string;
   narration: string;
   callBackUrl: string;
   splitCode: string;
-  shouldTTokenzeCard: boolean;
+  shouldTokenizeCard: boolean;
   customer: Customer;
   integrationKey: string;
   mcc: 0;
-  merchantDescription: string;
+  merchantDescriptor: string;
 }
 
 export interface CardPayment {

@@ -4,6 +4,7 @@ import { IReply } from "./Reply";
 interface IForum extends Document {
   title: string;
   picture: string;
+  description: string;
   // replies: Array<IReply>;
 }
 

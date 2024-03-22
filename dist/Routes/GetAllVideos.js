@@ -6,7 +6,7 @@ const getAllVideosRouter = express.Router();
  * '/api/resources/getAllVideos/{page}/{pageSize}':
  *   get:
  *     tags:
- *       - Resources
+ *       - All Resources
  *     summary: This Endpoint to get all videos
  *     parameters:
  *       - in: path

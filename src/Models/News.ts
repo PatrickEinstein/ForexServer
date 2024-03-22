@@ -4,7 +4,7 @@ interface INews extends Document {
   title: string;
   picture: string;
   note: string;
-  desciption: string;
+  description: string;
 }
 
 const NewsSchema: Schema<INews> = new mongoose.Schema(

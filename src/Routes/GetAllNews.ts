@@ -9,7 +9,7 @@ const getAllNewsRouter = express.Router();
  * '/api/resources/getAllNews/{page}/{pageSize}':
  *   get:
  *     tags:
- *       - Resources
+ *       - All Resources
  *     summary: This Endpoint to get all news
  *     parameters:
  *       - in: path

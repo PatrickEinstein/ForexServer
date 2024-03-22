@@ -6,7 +6,7 @@ const getAllThreadsRouter = express.Router();
  * '/api/resources/getAllThreads/{page}/{pageSize}':
  *   get:
  *     tags:
- *       - Resources
+ *       - All Resources
  *     summary: This Endpoint to get all threads
  *     parameters:
  *       - in: path

@@ -19,7 +19,7 @@ const AnalysisSchema: Schema<IAnalysis> = new mongoose.Schema(
     },
     note: {
       type: String,
-      required: true,
+      // required: true,
     },
     description: {
       type: String,

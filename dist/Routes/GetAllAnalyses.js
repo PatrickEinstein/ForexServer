@@ -6,7 +6,7 @@ const getAllAnalysesRouter = express.Router();
  * '/api/resources/getAllAnalyses/{page}/{pageSize}':
  *   get:
  *     tags:
- *       - Resources
+ *       - All Resources
  *     summary: This Endpoint to get all analyses
  *     parameters:
  *       - in: path

@@ -2,27 +2,32 @@ import GeneratePaymentAdvice from "./GetPaymentAdvice.js";
 import LoginToPelPayService from "./LoginToPelpay.js";
 const CardPaymentPelPay = async (req, res, next) => {
     try {
-        // console.log(`REQBODY::`,req.body);
         const Token = await LoginToPelPayService();
-        // console.log(`Token::`,Token);
         const adviceRef = await GeneratePaymentAdvice(req.body, Token.access_token);
-        console.log(`adviceRef::`, adviceRef);
-        const payload = req.body;
-        const response = await fetch(`${process.env.Payment_Base_Url}/Payment/process/card/${adviceRef}`, {
+        const { cardPayment: { cardNumber, expiredMonth, expiredYear, cvv, cardPin, shouldSaveCard, }, } = req.body;
+        const response = await fetch(`https://api.pelpay.ng/Payment/process/card/${adviceRef.responseData.adviceReference}`, {
             method: "POST",
             headers: {
-                Authorization: `Bearer ${Token}`,
+                Authorization: `Bearer ${Token.access_token}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                payload,
+                cardNumber,
+                expiredMonth,
+                expiredYear,
+                cvv,
+                cardPin,
+                shouldSaveCard,
             }),
         });
         const deliveredResponse = await response.json();
+        console.log(`creq==>`, deliveredResponse.responseData.formData.formData.JWT, `acsUrl==>`, deliveredResponse.responseData.formData.url);
+        const redirectUrl = `https://up-payment.vercel.app/${deliveredResponse.responseData.formData.formData.JWT}/acsUrl?acsUrl=${deliveredResponse.responseData.formData.url}`;
         res.status(200).json({
             status: true,
-            message: deliveredResponse,
+            message: redirectUrl,
         });
+        // res.redirect(redirectUrl);
     }
     catch (err) {
         res.status(500).json({
