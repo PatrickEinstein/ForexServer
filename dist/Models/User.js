@@ -10,6 +10,13 @@ var Subscription;
     Subscription["Regular"] = "Regular";
     Subscription["Premium"] = "Premium";
 })(Subscription || (Subscription = {}));
+var Experience;
+(function (Experience) {
+    Experience["Beginner"] = "Beginner";
+    Experience["Intermediate"] = "Intermediate";
+    Experience["Advanced"] = "Advanced";
+    Experience["Professional"] = "Professional";
+})(Experience || (Experience = {}));
 const UserSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -39,14 +46,35 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: Object.values(Role),
         default: Role.Regular,
-        required: true,
+        // required: true,
     },
     subscription: {
         type: String,
         enum: Object.values(Subscription),
         default: Subscription.Freemium,
+        // required: true,
+    },
+    experience: {
+        type: String,
+        enum: Object.values(Experience),
+        default: Experience.Beginner,
+    },
+    years_of_trading: {
+        type: Number,
+        default: 1,
+    },
+    ClientId: {
+        type: String,
         required: true,
     },
+    ClientSecret: {
+        type: String,
+        required: true,
+    },
+    UniqueId: {
+        type: String,
+        required: true,
+    }
 });
 const UserModel = mongoose.model("UserModel", UserSchema);
 export default UserModel;

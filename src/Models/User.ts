@@ -11,6 +11,13 @@ enum Subscription {
   Premium = "Premium",
 }
 
+enum Experience {
+  Beginner = "Beginner",
+  Intermediate = "Intermediate",
+  Advanced = "Advanced",
+  Professional = "Professional",
+}
+
 interface IUser extends Document {
   firstName: string;
   lastName: string;
@@ -20,6 +27,11 @@ interface IUser extends Document {
   password: string;
   role: Role;
   subscription: Subscription;
+  experience: string;
+  years_of_trading: number;
+  ClientId: string;
+  ClientSecret: string;
+  UniqueId: string;
 }
 
 const UserSchema: Schema<IUser> = new mongoose.Schema({
@@ -51,19 +63,37 @@ const UserSchema: Schema<IUser> = new mongoose.Schema({
     type: String,
     enum: Object.values(Role),
     default: Role.Regular,
-    required: true,
+    // required: true,
   },
   subscription: {
     type: String,
     enum: Object.values(Subscription),
     default: Subscription.Freemium,
+    // required: true,
+  },
+  experience: {
+    type: String,
+    enum: Object.values(Experience),
+    default: Experience.Beginner,
+  },
+  years_of_trading: {
+    type: Number,
+    default: 1,
+  },
+  ClientId:{
+    type: String,
     required: true,
   },
+  ClientSecret:{
+    type: String,
+    required: true,
+  },
+  UniqueId:{
+    type: String,
+    required: true,
+  }
 });
 
-const UserModel: Model<IUser> = mongoose.model<IUser>(
-  "UserModel",
-  UserSchema
-);
+const UserModel: Model<IUser> = mongoose.model<IUser>("UserModel", UserSchema);
 
 export default UserModel;
