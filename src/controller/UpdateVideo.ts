@@ -9,7 +9,7 @@ const updateVideo: RequestHandler = async (req, res) => {
     const FoundVideo = await VideoModel.findOne({ _id });
 
     if (FoundVideo) {
-      const imageUrl = await uploadResources(req.files[0].path, "Forum");
+      const imageUrl = req.files[0] && await uploadResources(req.files[0].path, "Forum");
       FoundVideo.title = title || FoundVideo.title;
       FoundVideo.description = description || FoundVideo.description;
       FoundVideo.link = imageUrl || FoundVideo.link;

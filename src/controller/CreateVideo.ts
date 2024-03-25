@@ -16,12 +16,16 @@ const UploadVideo: RequestHandler = async (req, res, next) => {
       message: "a post must contain title, description, and an image",
     });
   }
-  const videoUrl = await uploadResources(req.files[0].path, "Video");
+  const [videoUrl, script] = await Promise.all([
+    uploadResources(req.files[0].path, "Video"),
+    uploadResources(req.files[1].path, "Scripts"),
+  ]);
   try {
     const newVideo = await new VideoModel({
       title,
       description,
       link: videoUrl,
+      script: script,
     });
     await newVideo.save();
     res.status(201).json({

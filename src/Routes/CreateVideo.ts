@@ -6,11 +6,11 @@ let CreateVideoRouter = express.Router();
 /**
  * @openapi
  * paths:
- *   /api/createVideo:
+ *   /api/createCourse:
  *     post:
  *       tags:
  *         - Upload
- *       summary: Create a new Video
+ *       summary: Create a new Course
  *       requestBody:
  *         required: true
  *         content:
@@ -25,6 +25,9 @@ let CreateVideoRouter = express.Router();
  *                 video:
  *                   type: string
  *                   format: binary
+ *                 script:
+ *                   type: string
+ *                   format: binary
  *       responses:
  *         200:
  *           description: {}
@@ -32,6 +35,6 @@ let CreateVideoRouter = express.Router();
  *           description: Not Found
  */
 
-CreateVideoRouter.post("/api/createVideo", UploadVideo);
+CreateVideoRouter.post("/api/createCourse", UploadVideo);
 
 export default CreateVideoRouter;
