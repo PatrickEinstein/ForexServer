@@ -8,6 +8,7 @@ const UploadVideo = async (req, res, next) => {
             message: "a post must contain title, description, and an image",
         });
     }
+    console.log(req.files);
     const [videoUrl, script] = await Promise.all([
         uploadResources(req.files[0].path, "Video"),
         uploadResources(req.files[1].path, "Scripts"),

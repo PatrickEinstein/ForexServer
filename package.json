@@ -6,12 +6,12 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon dist/app.js",
-    "start": "node dist/app.js",
+    "dev": "nodemon dist/index.js",
+    "start": "node dist/index.js",
     "socket": "nodemon dist/config/WebSocketConfig.js",
-    "cluster": "pm2 start dist/app.js -i max",
-    "reset": "pm2 reset dist/app.js",
-    "stop": "pm2 stop dist/app.js"
+    "cluster": "pm2 start dist/index.js -i max",
+    "reset": "pm2 reset dist/index.js",
+    "stop": "pm2 stop dist/index.js"
   },
   "author": "",
   "license": "ISC",
