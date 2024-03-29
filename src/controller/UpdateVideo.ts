@@ -15,7 +15,7 @@ const updateVideo: RequestHandler = async (req, res) => {
       FoundVideo.link = imageUrl || FoundVideo.link;
       FoundVideo.save();
       res.status(200).json({
-        status: false,
+        status: true,
         message: FoundVideo,
       });
     } else {

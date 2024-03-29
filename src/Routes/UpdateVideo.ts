@@ -8,7 +8,7 @@ const UpdateVideoRouter = express.Router();
 
 /**
  * @openapi
- * /update/Video/{id}:
+ * /update/chapter/{id}:
  *   patch:
  *     tags:
  *       - Update Resources
@@ -56,5 +56,5 @@ const UpdateVideoRouter = express.Router();
  *         description: Internal server error
  */
 
-UpdateVideoRouter.patch("/update/Video/:_id", updateVideo);
+UpdateVideoRouter.patch("/update/chapter/:_id", updateVideo);
 export default UpdateVideoRouter;

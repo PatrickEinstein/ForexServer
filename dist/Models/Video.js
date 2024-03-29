@@ -15,7 +15,23 @@ const VideoSchema = new mongoose.Schema({
     script: {
         type: String,
         required: true,
-    }
+    },
+    courseId: {
+        type: String,
+        required: true,
+    },
+    courseTitle: {
+        type: String,
+        required: true,
+    },
+    muxData: {
+        type: Object,
+        required: false,
+    },
+    userProgress: {
+        type: Object,
+        required: false,
+    },
 }, {
     timestamps: true,
 });
