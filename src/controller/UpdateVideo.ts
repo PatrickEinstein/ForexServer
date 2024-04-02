@@ -9,10 +9,17 @@ const updateVideo: RequestHandler = async (req, res) => {
     const FoundVideo = await VideoModel.findOne({ _id });
 
     if (FoundVideo) {
-      const imageUrl = req.files[0] && await uploadResources(req.files[0].path, "Forum");
+      const imageUrl =
+        req.files[0] && (await uploadResources(req.files[0].path, "Forum"));
+      const scriptUrl =
+        req.files[1] && (await uploadResources(req.files[1].path, "Script"));
+
+        console.log(req.files)
+
       FoundVideo.title = title || FoundVideo.title;
       FoundVideo.description = description || FoundVideo.description;
       FoundVideo.link = imageUrl || FoundVideo.link;
+      FoundVideo.script = scriptUrl || FoundVideo.script;
       FoundVideo.save();
       res.status(200).json({
         status: true,

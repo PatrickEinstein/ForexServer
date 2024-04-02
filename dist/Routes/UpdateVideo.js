@@ -28,7 +28,11 @@ const UpdateVideoRouter = express.Router();
  *               description:
  *                 type: string
  *                 description: The new description for the Video
- *               picture:
+ *               video:
+ *                 type: string
+ *                 format: binary
+ *                 description: The new picture for the Video
+ *               script:
  *                 type: string
  *                 format: binary
  *                 description: The new picture for the Video
