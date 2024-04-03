@@ -10,7 +10,6 @@ const DeleteCourse: RequestHandler = async (req, res) => {
   try {
     const [course, videos] = await Promise.all([
       await CourseModel.deleteOne({ _id: id }),
-
       await VideoModel.deleteMany({ courseId: id }),
     ]);
 

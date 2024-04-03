@@ -59,6 +59,7 @@ import getAllCoursesRouter from "./Routes/GetAllCourses.js";
 import getCoursesAndChapters from "./controller/GetCoursesAndChapters.js";
 import GetCourseAndChaptersRouter from "./Routes/GetCourseAndChapters.js";
 import DeleteCourseRouter from "./Routes/DeleteCourse.js";
+import DeleteChapterRouter from "./Routes/DeleteChapter.js";
 
 const app = express();
 const __dirname = path.dirname(new URL(import.meta.url).pathname).slice(1);
@@ -190,6 +191,7 @@ app.use("/", CreateCourseRouter);
 app.use("/", getAllCoursesRouter);
 app.use("/", GetCourseAndChaptersRouter);
 app.use("/", DeleteCourseRouter);
+app.use("/", DeleteChapterRouter)
 
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 const uri: string = process.env.DB_URI ? process.env.DB_URI : "";

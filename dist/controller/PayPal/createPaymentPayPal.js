@@ -14,8 +14,10 @@ const createPaymentPayPal = (req, res) => {
             payment_method: "paypal",
         },
         redirect_urls: {
-            return_url: "http://localhost:8055/api/paypal/execute",
-            cancel_url: "http://localhost:8055/failed",
+            return_url: "http://localhost:5000/api/paypal/execute",
+            cancel_url: "http://localhost:5000/failed",
+            // return_url: "https://fxserver-1.onrender.com/api/paypal/execute",
+            // cancel_url: "https://fxserver-1.onrender.com/failed",
         },
         transactions: [
             {
@@ -29,7 +31,7 @@ const createPaymentPayPal = (req, res) => {
     }, function (error, payment) {
         if (error) {
             return res.status(500).json({
-                error: error.message,
+                message: error.message,
             });
         }
         else {
@@ -37,7 +39,10 @@ const createPaymentPayPal = (req, res) => {
             // Redirect the user to payment approval URL
             for (let i = 0; i < payment.links.length; i++) {
                 if (payment.links[i].rel === "approval_url") {
-                    return res.redirect(payment.links[i].href);
+                    return res.status(200).json({
+                        status: true,
+                        message: payment.links[i].href,
+                    });
                 }
             }
         }

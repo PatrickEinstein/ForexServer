@@ -20,13 +20,13 @@ const createPaymentStripe = async (req, res) => {
                 },
             ],
             mode: "payment",
-            success_url: "http://localhost:5173/success", //this will be a frontend page
-            cancel_url: "http://localhost:5173/cancel", //this will be a frontend page
+            success_url: "http://localhost:3000/success", //this will be a frontend page
+            cancel_url: "http://localhost:3000/cancel", //this will be a frontend page
         });
         // console.log(`STRIPE`, session)
         const { url } = session;
-        // res.json({ id: session.id });
-        res.redirect(url ?? "");
+        res.status(200).json({ status: true, message: url });
+        // res.redirect(url ?? "");
     }
     catch (error) {
         console.error("Error processing payment:", error.message);
@@ -34,3 +34,4 @@ const createPaymentStripe = async (req, res) => {
     }
 };
 export default createPaymentStripe;
+// 4242 4242 4242 4242

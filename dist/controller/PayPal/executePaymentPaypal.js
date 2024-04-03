@@ -9,8 +9,10 @@ const executePaymentPayPal = (req, res) => {
                 .send("Payment could not be completed at this time, please try again soon");
         }
         else {
+            const link = payment.state?.toUpperCase();
             console.log("Payment executed successfully:", payment);
-            res.json({ payment: payment });
+            res.redirect(`https://chamspay.vercel.app/status/${link}`);
+            // res.json({ payment: payment.state });
         }
     });
 };

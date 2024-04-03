@@ -7,7 +7,7 @@ const GetAllCourses = async (req, res) => {
         const allCourses = await CourseModel.find({})
             .skip(skip)
             .limit(pageSize)
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: 1 });
         res.status(201).json({
             status: true,
             message: allCourses,
