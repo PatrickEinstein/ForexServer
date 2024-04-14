@@ -49,17 +49,24 @@ import UpdateNewsRouter from "./Routes/UpdateNews.js";
 import UpdateReplyRouter from "./Routes/UpdateReply.js";
 import UpdateVideoRouter from "./Routes/UpdateVideo.js";
 import helmet from "helmet";
-import TokenVerification from "./Middlewares/TokenVerification.js";
 import RegisterRouter from "./Routes/Register.js";
 import LoginRouter from "./Routes/Login.js";
-import LoginWithGoogleRouter from "./Routes/LoginWithGoogle.js";
 import createChapterRouter from "./Routes/CreateChapter.js";
 import CreateCourseRouter from "./Routes/CreateCourse.js";
 import getAllCoursesRouter from "./Routes/GetAllCourses.js";
-import getCoursesAndChapters from "./controller/GetCoursesAndChapters.js";
 import GetCourseAndChaptersRouter from "./Routes/GetCourseAndChapters.js";
 import DeleteCourseRouter from "./Routes/DeleteCourse.js";
 import DeleteChapterRouter from "./Routes/DeleteChapter.js";
+import PelPayWebhookRouter from "./Routes/PelPayWebhook.js";
+import { ManuallyCreateUser } from "./controller/ManuallyCreateUser.js";
+import LoginWithGoogleRouter from "./Routes/LoginWithGoogle.js";
+import TokenVerification, {
+  AuthMiddleWare,
+} from "./Middlewares/TokenVerification.js";
+import GetUserRegisteredCoursesRouter from "./Routes/GetUserRegisteredCourses.js";
+import FindTransactionbyIdRouter from "./Routes/FindTransactionbyId.js";
+import RequestMonitor from "./Middlewares/RequestMonitor.js";
+import GetUserByIdRouter from "./Routes/GetUserById.js";
 
 const app = express();
 const __dirname = path.dirname(new URL(import.meta.url).pathname).slice(1);
@@ -136,6 +143,7 @@ const verifyCallback = (
   done: any
 ) => {
   done(null, profile);
+  // ManuallyCreateUser(profile._json);
 };
 passport.use(new Strategy(StrategyOptions, verifyCallback));
 passport.serializeUser((user: any, done) => {
@@ -145,53 +153,65 @@ passport.deserializeUser((obj: any, done) => {
   done(null, obj);
 });
 
-const checkLoggedIn: RequestHandler = (req, res, next) => {
-  const isLoggedIn = req.isAuthenticated() && req.user;
-  if (!isLoggedIn) {
-    return res.status(401).json({
-      error: "You must be logged in by Google or mail",
-    });
-  }
-  const token = TokenVerification();
-  next();
-};
+///////////////////////////
+// GENERAL
 
-app.use("/", LoginWithGoogleRouter);
-app.use("/", CreateAnalysisRouter);
-app.use("/", CreateForumRouter);
-app.use("/", CreateReplyRouter);
-app.use("/", CreateNewsRouter);
-app.use("/", getAllAnalysesRouter);
-app.use("/", paywithPelPayRouter);
-app.use("/", paywithPayPalRouter);
-app.use("/", paywithPayPalExecuteRouter);
-app.use("/", paywithStripeCreateRouter);
-app.use("/", paywithStripeEditableCreateRouter);
-app.use("/", stripeCallbackUrlRouter);
-app.use("/", getAllThreadsRouter);
-app.use("/", RegisterRouter);
-app.use("/", LoginRouter);
-app.use("/", getAllNewsRouter);
-app.use("/", getAllVideosRouter);
-app.use("/", DeleteAnalysisRouter);
-app.use("/", DeleteForumRouter);
-app.use("/", DeleteNewsRouter);
-app.use("/", DeleteReplyRouter);
-app.use("/", GetAnAnalysisRouter);
-app.use("/", GetAnNewsRouter);
-app.use("/", GetAVideoRouter);
-app.use("/", GetAThreadRouter);
-app.use("/", UpdateAnalysisRouter);
-app.use("/", UpdateForumRouter);
-app.use("/", UpdateNewsRouter);
-app.use("/", UpdateReplyRouter);
-app.use("/", UpdateVideoRouter);
-app.use("/", createChapterRouter);
-app.use("/", CreateCourseRouter);
-app.use("/", getAllCoursesRouter);
-app.use("/", GetCourseAndChaptersRouter);
-app.use("/", DeleteCourseRouter);
-app.use("/", DeleteChapterRouter)
+app.use("/", RequestMonitor, getAllNewsRouter);
+app.use("/", RequestMonitor, getAllVideosRouter);
+app.use("/", RequestMonitor, getAllAnalysesRouter);
+app.use("/", RequestMonitor, getAllThreadsRouter);
+app.use("/", RequestMonitor, getAllCoursesRouter);
+////////////////////////
+////////////////////////////////
+// AUTHENTICATION
+app.use("/", RequestMonitor, RegisterRouter);
+app.use("/", RequestMonitor, LoginRouter);
+app.use("/", RequestMonitor, LoginWithGoogleRouter);
+////////////////////////////
+//PAYMENTS WEBHOOKS
+app.use("/", RequestMonitor, paywithPayPalExecuteRouter);
+app.use("/", RequestMonitor, stripeCallbackUrlRouter);
+app.use("/", RequestMonitor, PelPayWebhookRouter);
+////////////////////////////////
+//////////////////////////
+// PAYMENTS ENDPOINTS
+app.use("/", TokenVerification, RequestMonitor, paywithPelPayRouter);
+app.use("/", TokenVerification, RequestMonitor, paywithPayPalRouter);
+app.use("/", TokenVerification, RequestMonitor, paywithStripeCreateRouter);
+app.use(
+  "/",
+  TokenVerification,
+  RequestMonitor,
+  paywithStripeEditableCreateRouter
+);
+////////////////////////
+
+//////////////////////////
+app.use("/", TokenVerification, RequestMonitor, CreateAnalysisRouter);
+app.use("/", TokenVerification, RequestMonitor, CreateForumRouter);
+app.use("/", TokenVerification, RequestMonitor, CreateReplyRouter);
+app.use("/", TokenVerification, RequestMonitor, CreateNewsRouter);
+app.use("/", TokenVerification, RequestMonitor, DeleteAnalysisRouter);
+app.use("/", TokenVerification, RequestMonitor, DeleteForumRouter);
+app.use("/", TokenVerification, RequestMonitor, DeleteNewsRouter);
+app.use("/", TokenVerification, RequestMonitor, DeleteReplyRouter);
+app.use("/", TokenVerification, RequestMonitor, GetAnAnalysisRouter);
+app.use("/", TokenVerification, RequestMonitor, GetAnNewsRouter);
+app.use("/", TokenVerification, RequestMonitor, GetAVideoRouter);
+app.use("/", TokenVerification, RequestMonitor, GetAThreadRouter);
+app.use("/", TokenVerification, RequestMonitor, UpdateAnalysisRouter);
+app.use("/", TokenVerification, RequestMonitor, UpdateForumRouter);
+app.use("/", TokenVerification, RequestMonitor, UpdateNewsRouter);
+app.use("/", TokenVerification, RequestMonitor, UpdateReplyRouter);
+app.use("/", TokenVerification, RequestMonitor, UpdateVideoRouter);
+app.use("/", TokenVerification, RequestMonitor, createChapterRouter);
+app.use("/", TokenVerification, RequestMonitor, CreateCourseRouter);
+app.use("/", TokenVerification, RequestMonitor, GetCourseAndChaptersRouter);
+app.use("/", TokenVerification, RequestMonitor, DeleteCourseRouter);
+app.use("/", TokenVerification, RequestMonitor, DeleteChapterRouter);
+app.use("/", TokenVerification, RequestMonitor, GetUserRegisteredCoursesRouter);
+app.use("/", TokenVerification, RequestMonitor, FindTransactionbyIdRouter);
+app.use("/", TokenVerification, RequestMonitor, GetUserByIdRouter);
 
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 const uri: string = process.env.DB_URI ? process.env.DB_URI : "";

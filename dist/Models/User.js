@@ -12,10 +12,13 @@ var Subscription;
 })(Subscription || (Subscription = {}));
 var Experience;
 (function (Experience) {
+    Experience["Novice"] = "Novice";
+    Experience["Amateur"] = "Amateur";
     Experience["Beginner"] = "Beginner";
     Experience["Intermediate"] = "Intermediate";
     Experience["Advanced"] = "Advanced";
     Experience["Professional"] = "Professional";
+    Experience["Expert"] = "Expert";
 })(Experience || (Experience = {}));
 const UserSchema = new mongoose.Schema({
     firstName: {
@@ -33,6 +36,9 @@ const UserSchema = new mongoose.Schema({
     DateOfBirth: {
         type: String,
         required: true,
+    },
+    profilePic: {
+        type: String,
     },
     email: {
         type: String,
@@ -74,6 +80,9 @@ const UserSchema = new mongoose.Schema({
     UniqueId: {
         type: String,
         required: true,
+    },
+    google_id: {
+        type: String,
     }
 });
 const UserModel = mongoose.model("UserModel", UserSchema);

@@ -1,38 +1,40 @@
 import mongoose from "mongoose";
-var State;
-(function (State) {
-    State["approved"] = "APPROVED";
-})(State || (State = {}));
-var Status;
-(function (Status) {
-    Status["verified"] = "VERIFIED";
-})(Status || (Status = {}));
 const PaymentSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+    },
     id: {
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+    },
     intent: {
         type: String,
-        required: true,
     },
     state: {
         type: String,
-        enum: State,
-        default: State.approved,
+        required: true,
     },
     cart: {
         type: String,
-        required: true,
+        // required: true,
     },
     payment_method: {
         type: String,
-        required: true,
     },
     status: {
         type: String,
-        enum: Status,
-        default: Status.verified,
-        required: true,
-    }
+    },
+    firstName: String,
+    lastName: String,
+    createTime: String,
+    countryCode: String,
+    email: String,
+    amount: String,
+    currency: String,
 });
+const PaymentModel = mongoose.model("Payment", PaymentSchema);
+export default PaymentModel;

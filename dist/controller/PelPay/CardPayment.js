@@ -1,33 +1,31 @@
 import GeneratePaymentAdvice from "./GetPaymentAdvice.js";
+// import { CardPayment } from "../../Models/PelPayModels.js";
 import LoginToPelPayService from "./LoginToPelpay.js";
+import PaymentModel from "../../Models/PaymentModel.js";
 const CardPaymentPelPay = async (req, res, next) => {
+    console.log(req.body);
     try {
         const Token = await LoginToPelPayService();
         const adviceRef = await GeneratePaymentAdvice(req.body, Token.access_token);
-        const { cardPayment: { cardNumber, expiredMonth, expiredYear, cvv, cardPin, shouldSaveCard, }, } = req.body;
-        const response = await fetch(`https://api.pelpay.ng/Payment/process/card/${adviceRef.responseData.adviceReference}`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${Token.access_token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                cardNumber,
-                expiredMonth,
-                expiredYear,
-                cvv,
-                cardPin,
-                shouldSaveCard,
-            }),
+        // console.log(`adRef::`, adviceRef);
+        const { responseData: { currency, adviceReference, amount, narration, status, merchantName, channels, }, } = adviceRef;
+        const savedPayment = await new PaymentModel({
+            userId: req.body.userId,
+            id: adviceReference,
+            description: narration,
+            intent: status,
+            state: status,
+            payment_method: channels[0],
+            createTime: Date.now().toString(),
+            currency,
+            total: amount,
         });
-        const deliveredResponse = await response.json();
-        console.log(`creq==>`, deliveredResponse.responseData.formData.formData.JWT, `acsUrl==>`, deliveredResponse.responseData.formData.url);
-        const redirectUrl = `https://up-payment.vercel.app/${deliveredResponse.responseData.formData.formData.JWT}/acsUrl?acsUrl=${deliveredResponse.responseData.formData.url}`;
+        await savedPayment.save();
+        console.log(`savedPayment`, savedPayment);
         res.status(200).json({
             status: true,
-            message: redirectUrl,
+            message: adviceRef.responseData.paymentUrl,
         });
-        // res.redirect(redirectUrl);
     }
     catch (err) {
         res.status(500).json({

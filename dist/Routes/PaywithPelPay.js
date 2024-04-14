@@ -30,7 +30,7 @@ let paywithPelPayRouter = express.Router();
  *                   default: "test"
  *                 callBackUrl:
  *                   type: string
- *                   default: "https://your_callback_url.com/"
+ *                   default: "http://localhost:5000/api/pelpaycallback"
  *                 splitCode:
  *                   type: string
  *                   default: ""
