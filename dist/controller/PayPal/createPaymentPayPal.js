@@ -9,7 +9,7 @@ paypal.configure({
 });
 const createPaymentPayPal = (req, res) => {
     const { amount, currency, description, userId } = req.body;
-    const baseUrl = "https://fxserver-1.onrender.com";
+    const baseUrl = "https://forexserver.onrender.com";
     // const baseUrl ="http://localhost:5000"
     paypal.payment.create({
         intent: "sale",
