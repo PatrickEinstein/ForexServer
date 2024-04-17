@@ -9,7 +9,7 @@ const VerifyOtp = async (req, res, next) => {
         if (isExists) {
             const updatedUser = await UserModel.findOneAndUpdate({ _id: user }, { $set: { isVerified: true } }, { upsert: true });
             console.log(updatedUser);
-            return res.redirect(`${baseUrl}/dashboard/${user}}`);
+            return res.redirect(`${baseUrl}/login`);
         }
         return res.status(401).json({
             status: false,

@@ -8,18 +8,16 @@ import OTP from "../Models/Otp.js";
 import mailer from "../config/Nodemailer.js";
 const LoginWithEmailAndPassword = async (req, res) => {
     const { email, password } = req.body;
-    // const baseUrl = "https://next-fx-client.vercel.app";
-    const baseUrl = "http://localhost:3000";
+    // console.log({ email, password });
+    const baseUrl = "https://next-fx-client.vercel.app";
+    // const baseUrl = "http://localhost:3000";
     try {
         const userFoundWithMail = await UserModel.findOne({ email: email });
-        // console.log(userFoundWithMail)
         if (userFoundWithMail) {
             const isMatch = await bcrypt.compare(password, userFoundWithMail?.password);
+            // console.log(`isMatch::`, isMatch, `foundafterMatch`, userFoundWithMail);
             if (isMatch) {
-                const token = jwt.sign({ user: userFoundWithMail.ClientId, token: GetRandomInit(216) }, process.env.JSONKEY, {
-                    expiresIn: 18000,
-                });
-                console.log(userFoundWithMail.isVerified);
+                console.log(`isMatch:::`, userFoundWithMail);
                 if (!userFoundWithMail.isVerified) {
                     const { _id } = userFoundWithMail;
                     const otp = Math.trunc(Math.random() * 9000 + 1);
@@ -27,29 +25,40 @@ const LoginWithEmailAndPassword = async (req, res) => {
                     newOTP.save();
                     const subject = "WebPips Verifiation";
                     await mailer(email, subject, newOTP.otp);
-                    res.status(200).json({
+                    return res.status(200).json({
                         status: true,
                         link: `${baseUrl}/verify/?auth=${_id}`,
                     });
                 }
                 else {
-                    res.status(200).json({
+                    // console.log(`isMatchedVerified:::`, userFoundWithMail);
+                    const token = jwt.sign({ user: userFoundWithMail.ClientId, token: GetRandomInit(216) }, process.env.JSONKEY, {
+                        expiresIn: 18000,
+                    });
+                    return res.status(200).json({
                         status: true,
                         user: userFoundWithMail._id,
                         response: token,
                     });
                 }
             }
+            else {
+                return res.status(401).json({
+                    status: false,
+                    response: "Email or Password incorrect",
+                });
+            }
         }
         else {
-            res.status(401).json({
+            // console.log(`notMatched:::`, userFoundWithMail);
+            return res.status(401).json({
                 status: false,
                 response: "Email or Password incorrect",
             });
         }
     }
     catch (err) {
-        res.status(401).json({
+        return res.status(401).json({
             status: false,
             response: err.message,
         });

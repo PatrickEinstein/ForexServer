@@ -17,7 +17,7 @@ const VerifyOtp: RequestHandler = async (req, res, next) => {
         { upsert: true }
       );
       console.log(updatedUser);
-      return res.redirect(`${baseUrl}/dashboard/${user}}`);
+      return res.redirect(`${baseUrl}/login`);
     }
     return res.status(401).json({
       status: false,
