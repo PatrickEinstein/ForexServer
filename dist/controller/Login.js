@@ -1,33 +1,50 @@
 import UserModel from "../Models/User.js";
-import { Decrypter } from "../Authority/Cryptography.js";
 import { GetRandomInit } from "../config/GerRandomInit.js";
+import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
 import jwt from "jsonwebtoken";
+import OTP from "../Models/Otp.js";
+import mailer from "../config/Nodemailer.js";
 const LoginWithEmailAndPassword = async (req, res) => {
     const { email, password } = req.body;
+    // const baseUrl = "https://next-fx-client.vercel.app";
+    const baseUrl = "http://localhost:3000";
     try {
         const userFoundWithMail = await UserModel.findOne({ email: email });
-        console.log(userFoundWithMail);
+        // console.log(userFoundWithMail)
         if (userFoundWithMail) {
-            const P1 = Decrypter(userFoundWithMail?.password);
-            console.log(`P1`, P1);
-            const BOOL = P1 === password;
-            console.log(BOOL);
-            if (BOOL) {
+            const isMatch = await bcrypt.compare(password, userFoundWithMail?.password);
+            if (isMatch) {
                 const token = jwt.sign({ user: userFoundWithMail.ClientId, token: GetRandomInit(216) }, process.env.JSONKEY, {
                     expiresIn: 18000,
                 });
-                res.status(200).json({
-                    status: true,
-                    response: token,
-                });
+                console.log(userFoundWithMail.isVerified);
+                if (!userFoundWithMail.isVerified) {
+                    const { _id } = userFoundWithMail;
+                    const otp = Math.trunc(Math.random() * 9000 + 1);
+                    const newOTP = await new OTP({ otp, user: _id });
+                    newOTP.save();
+                    const subject = "WebPips Verifiation";
+                    await mailer(email, subject, newOTP.otp);
+                    res.status(200).json({
+                        status: true,
+                        link: `${baseUrl}/verify/?auth=${_id}`,
+                    });
+                }
+                else {
+                    res.status(200).json({
+                        status: true,
+                        user: userFoundWithMail._id,
+                        response: token,
+                    });
+                }
             }
         }
         else {
             res.status(401).json({
                 status: false,
-                response: "UnAuthorized",
+                response: "Email or Password incorrect",
             });
         }
     }
