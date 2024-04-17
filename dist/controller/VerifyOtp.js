@@ -1,7 +1,7 @@
 import OTP from "../Models/Otp.js";
 import UserModel from "../Models/User.js";
-// const baseUrl = "https://next-fx-client.vercel.app";
-const baseUrl = "http://localhost:3000";
+const baseUrl = "https://next-fx-client.vercel.app";
+// const baseUrl = "http://localhost:3000";
 const VerifyOtp = async (req, res, next) => {
     const { user, otp } = req.query;
     try {
