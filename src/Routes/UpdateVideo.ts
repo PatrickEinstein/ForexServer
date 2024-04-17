@@ -1,14 +1,11 @@
 import express from "express";
 import updateVideo from "../controller/UpdateVideo.js";
 
-
-
-
 const UpdateVideoRouter = express.Router();
 
 /**
  * @openapi
- * /update/Video/{id}:
+ * /update/chapter/{id}:
  *   patch:
  *     tags:
  *       - Update Resources
@@ -33,7 +30,11 @@ const UpdateVideoRouter = express.Router();
  *               description:
  *                 type: string
  *                 description: The new description for the Video
- *               picture:
+ *               video:
+ *                 type: string
+ *                 format: binary
+ *                 description: The new picture for the Video
+ *               script:
  *                 type: string
  *                 format: binary
  *                 description: The new picture for the Video
@@ -56,5 +57,5 @@ const UpdateVideoRouter = express.Router();
  *         description: Internal server error
  */
 
-UpdateVideoRouter.patch("/update/Video/:_id", updateVideo);
+UpdateVideoRouter.patch("/update/chapter/:_id", updateVideo);
 export default UpdateVideoRouter;

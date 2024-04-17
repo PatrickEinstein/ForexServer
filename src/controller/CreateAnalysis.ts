@@ -29,8 +29,6 @@ const UploadAnalysis: RequestHandler = async (req, res, next) => {
     });
   }
   const imageUrl = await uploadResources(req.files[0].path, "Analyses");
-
-
   try {
     const newAnalysis = await new AnalysisModel({
       title,

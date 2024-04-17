@@ -4,6 +4,11 @@ interface IVideo extends Document {
   title: String;
   description: String;
   link: String;
+  script?: String;
+  courseId: String;
+  courseTitle: String;
+  muxData: Object;
+  userProgress: Object;
 }
 
 const VideoSchema: Schema<IVideo> = new mongoose.Schema(
@@ -19,6 +24,26 @@ const VideoSchema: Schema<IVideo> = new mongoose.Schema(
     link: {
       type: String,
       required: true,
+    },
+    script: {
+      type: String,
+      required: true,
+    },
+    courseId: {
+      type: String,
+      required: true,
+    },
+    courseTitle: {
+      type: String,
+      required: true,
+    },
+    muxData: {
+      type: Object,
+      required: false,
+    },
+    userProgress: {
+      type: Object,
+      required: false,
     },
   },
   {

@@ -1,19 +1,10 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import passport from "passport";
 
 
+
+
 const LoginWithGoogleRouter = express.Router();
-
-const app = express();
-
-
-LoginWithGoogleRouter.get(
-  "/auth/login/google",
-  passport.authenticate("google", {
-    scope: ["email", "profile"],
-  })
-);
-
 LoginWithGoogleRouter.get(
   "/auth/login/google",
   passport.authenticate("google", {
@@ -24,12 +15,13 @@ LoginWithGoogleRouter.get(
 LoginWithGoogleRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/failure",
-    successRedirect: "/api/docs",
+    failureRedirect: "http://localhost:3000/dashboard",
+    successRedirect: "http://localhost:3000/login",
     session: true,
   }),
   (req, res, next) => {
-    console.log("Google called me back");
+    console.log("User Profile:", req.user);
+    // res.redirect("http://localhost:3000/login");
   }
 );
 
@@ -37,10 +29,7 @@ LoginWithGoogleRouter.get("/auth/logout", (req, res) => {
   req.logout((done) => {
     console.log(done);
   });
-  return res.redirect("/");
-});
-LoginWithGoogleRouter.get("/failure", (req, res) => {
-  return res.send("failed to log in, try again later");
+  return res.redirect("http://localhost:3000/login");
 });
 
 export default LoginWithGoogleRouter;

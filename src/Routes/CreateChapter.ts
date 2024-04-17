@@ -1,16 +1,16 @@
 import express from "express";
-import UploadVideo from "../controller/CreateVideo.js";
+import createChapter from "../controller/CreateChapter.js";
 
-let CreateVideoRouter = express.Router();
+let createChapterRouter = express.Router();
 
 /**
  * @openapi
  * paths:
- *   /api/createVideo:
+ *   /api/createChapter:
  *     post:
  *       tags:
- *         - Upload
- *       summary: Create a new Video
+ *         - Courses
+ *       summary: Create a new chapter
  *       requestBody:
  *         required: true
  *         content:
@@ -22,7 +22,14 @@ let CreateVideoRouter = express.Router();
  *                   type: string
  *                 description:
  *                   type: string
+ *                 courseId:
+ *                   type: string
+ *                 courseTitle:
+ *                   type: string
  *                 video:
+ *                   type: string
+ *                   format: binary
+ *                 script:
  *                   type: string
  *                   format: binary
  *       responses:
@@ -32,6 +39,6 @@ let CreateVideoRouter = express.Router();
  *           description: Not Found
  */
 
-CreateVideoRouter.post("/api/createVideo", UploadVideo);
+createChapterRouter.post("/api/createChapter", createChapter);
 
-export default CreateVideoRouter;
+export default createChapterRouter;

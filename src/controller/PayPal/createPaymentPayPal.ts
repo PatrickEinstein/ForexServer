@@ -1,6 +1,7 @@
 import paypal from "paypal-rest-sdk";
 import dotenv from "dotenv";
 import { RequestHandler } from "express";
+import PaymentModel from "../../Models/PaymentModel.js";
 dotenv.config();
 
 paypal.configure({
@@ -10,7 +11,11 @@ paypal.configure({
 });
 
 const createPaymentPayPal: RequestHandler = (req, res) => {
-  const { amount, currency, description } = req.body;
+  const { amount, currency, description, userId } = req.body;
+
+  const baseUrl = "https://fxserver-1.onrender.com";
+  // const baseUrl ="http://localhost:5000"
+
   paypal.payment.create(
     {
       intent: "sale",
@@ -18,8 +23,8 @@ const createPaymentPayPal: RequestHandler = (req, res) => {
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: "http://localhost:8055/api/paypal/execute",
-        cancel_url: "http://localhost:8055/failed",
+        return_url: `${baseUrl}/api/paypal/execute`,
+        cancel_url: `${baseUrl}/api/paypal/execute`,
       },
       transactions: [
         {
@@ -31,17 +36,45 @@ const createPaymentPayPal: RequestHandler = (req, res) => {
         },
       ],
     },
-    function (error: any, payment: any) {
+    async function (error: any, payment: any) {
       if (error) {
         return res.status(500).json({
-          error: error.message,
+          message: error.message,
         });
       } else {
         console.log("Payment created successfully:", payment);
-        // Redirect the user to payment approval URL
+        const {
+          id,
+          intent,
+          state,
+          payer: { payment_method },
+          transactions,
+          create_time,
+        } = payment;
+
+        const transInfo = transactions[0];
+        const {
+          amount: { total, currency },
+        } = transInfo;
+        const savedPayment = await new PaymentModel({
+          userId,
+          id,
+          description,
+          intent: "PENDING",
+          state,
+          payment_method,
+          createTime: create_time,
+          currency,
+          total,
+        });
+        await savedPayment.save();
+        console.log(`createdTransinCreate`, savedPayment);
         for (let i = 0; i < payment.links.length; i++) {
           if (payment.links[i].rel === "approval_url") {
-            return res.redirect(payment.links[i].href);
+            return res.status(200).json({
+              status: true,
+              message: payment.links[i].href,
+            });
           }
         }
       }

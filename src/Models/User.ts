@@ -12,10 +12,13 @@ enum Subscription {
 }
 
 enum Experience {
+  Novice = "Novice",
+  Amateur = "Amateur",
   Beginner = "Beginner",
   Intermediate = "Intermediate",
   Advanced = "Advanced",
   Professional = "Professional",
+  Expert = "Expert",
 }
 
 interface IUser extends Document {
@@ -32,6 +35,9 @@ interface IUser extends Document {
   ClientId: string;
   ClientSecret: string;
   UniqueId: string;
+  google_id: string;
+  profilePic: string;
+  isVerified: boolean;
 }
 
 const UserSchema: Schema<IUser> = new mongoose.Schema({
@@ -50,6 +56,9 @@ const UserSchema: Schema<IUser> = new mongoose.Schema({
   DateOfBirth: {
     type: String,
     required: true,
+  },
+  profilePic: {
+    type: String,
   },
   email: {
     type: String,
@@ -80,18 +89,25 @@ const UserSchema: Schema<IUser> = new mongoose.Schema({
     type: Number,
     default: 1,
   },
-  ClientId:{
+  ClientId: {
     type: String,
     required: true,
   },
-  ClientSecret:{
+  ClientSecret: {
     type: String,
     required: true,
   },
-  UniqueId:{
+  UniqueId: {
     type: String,
     required: true,
-  }
+  },
+  google_id: {
+    type: String,
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const UserModel: Model<IUser> = mongoose.model<IUser>("UserModel", UserSchema);

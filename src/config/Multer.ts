@@ -15,7 +15,7 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const directoryPath = `${path.join(__dirname, "..", "Uploads").slice(1)}`;
 const decodedpath = decodeURIComponent(directoryPath);
 
-console.log(`decoded path: ${decodedpath}`);
+// console.log(`decoded path: ${decodedpath}`);
 
 
 const storage: multer.StorageEngine = multer.diskStorage({
