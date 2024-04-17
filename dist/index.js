@@ -1,4 +1,4 @@
-import express, { RequestHandler } from "express";
+import express from "express";
 import http from "http";
 import cors from "cors";
 import path from "path";
@@ -8,16 +8,7 @@ import swaggerconfig from "./config/SwaggerUiDocs.js";
 import dotenv from "dotenv";
 import passport from "passport";
 import session from "express-session";
-import {
-  GoogleCallbackParameters,
-  Strategy,
-  StrategyOptionsWithRequest,
-  VerifyCallback,
-} from "passport-google-oauth20";
-import {
-  Strategy as FacebookStrategy,
-  StrategyOptions,
-} from "passport-facebook";
+import { Strategy, } from "passport-google-oauth20";
 dotenv.config();
 import { Server } from "socket.io";
 import upload from "./config/Multer.js";
@@ -58,20 +49,14 @@ import GetCourseAndChaptersRouter from "./Routes/GetCourseAndChapters.js";
 import DeleteCourseRouter from "./Routes/DeleteCourse.js";
 import DeleteChapterRouter from "./Routes/DeleteChapter.js";
 import PelPayWebhookRouter from "./Routes/PelPayWebhook.js";
-import { ManuallyCreateUser } from "./controller/ManuallyCreateUser.js";
 import LoginWithGoogleRouter from "./Routes/LoginWithGoogle.js";
-import TokenVerification, {
-  AuthMiddleWare,
-} from "./Middlewares/TokenVerification.js";
+import TokenVerification from "./Middlewares/TokenVerification.js";
 import GetUserRegisteredCoursesRouter from "./Routes/GetUserRegisteredCourses.js";
 import FindTransactionbyIdRouter from "./Routes/FindTransactionbyId.js";
-import RequestMonitor from "./Middlewares/RequestMonitor.js";
 import GetUserByIdRouter from "./Routes/GetUserById.js";
 import VerifyOtpRouter from "./Routes/VerifyOTP.js";
-
 const app = express();
 const __dirname = path.dirname(new URL(import.meta.url).pathname).slice(1);
-
 console.log(__dirname);
 const server = http.createServer(app);
 app.use(cors());
@@ -81,82 +66,62 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(upload.any()); //THIS IS MULTER JUST IN CASE I WILL BE NEEDING IT
 const io = new Server(8050, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST", "PUT"],
-  },
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST", "PUT"],
+    },
 });
-
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerconfig));
-
 app.get("/api/docs.json", (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.send(swaggerconfig);
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerconfig);
 });
 app.get("/", (req, res) => {
-  res.json("WELCOME");
+    res.json("WELCOME");
 });
-
-const pathTofile = decodeURIComponent(
-  path.join(__dirname, "controller", "Stripe", "createPaymentStripe.html")
-);
+const pathTofile = decodeURIComponent(path.join(__dirname, "controller", "Stripe", "createPaymentStripe.html"));
 app.get("/stripe", (req, res) => {
-  res.sendFile(pathTofile);
+    res.sendFile(pathTofile);
 });
 app.get("/failed", (req, res) => {
-  res.send("FAILED");
+    res.send("FAILED");
 });
-
 const AUTH_OPTIONs = {
-  COOKIE_KEY_1: process.env.COOKIE_KEY_1 || "",
-  COOKIE_KEY_2: process.env.COOKIE_KEY_2,
+    COOKIE_KEY_1: process.env.COOKIE_KEY_1 || "",
+    COOKIE_KEY_2: process.env.COOKIE_KEY_2,
 };
-
-app.use(
-  session({
+app.use(session({
     secret: "your_secret_key",
     resave: false,
     saveUninitialized: false,
-  })
-);
-
+}));
 app.use(passport.initialize());
 app.use(passport.session());
-
-const StrategyOptions: StrategyOptionsWithRequest = {
-  callbackURL: "/auth/google/callback",
-  clientID: process.env.G_client_id || "",
-  clientSecret: process.env.G_client_secret || "",
-  passReqToCallback: true,
+const StrategyOptions = {
+    callbackURL: "/auth/google/callback",
+    clientID: process.env.G_client_id || "",
+    clientSecret: process.env.G_client_secret || "",
+    passReqToCallback: true,
 };
-const FBStrategyOptions: StrategyOptions = {
-  callbackURL: "/auth/google/callback",
-  clientID: process.env.G_client_id || "",
-  clientSecret: process.env.G_client_secret || "",
-  passReqToCallback: false,
+const FBStrategyOptions = {
+    callbackURL: "/auth/google/callback",
+    clientID: process.env.G_client_id || "",
+    clientSecret: process.env.G_client_secret || "",
+    passReqToCallback: false,
 };
-
-const verifyCallback = (
-  req: any,
-  accessToken: any,
-  refreshToken: any,
-  profile: any,
-  done: any
-) => {
-  done(null, profile);
-  // ManuallyCreateUser(profile._json);
+const verifyCallback = (req, accessToken, refreshToken, profile, done) => {
+    done(null, profile);
+    // ManuallyCreateUser(profile._json);
 };
 passport.use(new Strategy(StrategyOptions, verifyCallback));
-passport.serializeUser((user: any, done) => {
-  done(null, user.id);
+passport.serializeUser((user, done) => {
+    done(null, user.id);
 });
-passport.deserializeUser((obj: any, done) => {
-  done(null, obj);
+passport.deserializeUser((obj, done) => {
+    done(null, obj);
 });
-
 ///////////////////////////
 // GENERAL
-
 app.use("/", getAllNewsRouter);
 app.use("/", getAllVideosRouter);
 app.use("/", getAllAnalysesRouter);
@@ -180,14 +145,8 @@ app.use("/", PelPayWebhookRouter);
 app.use("/", TokenVerification, paywithPelPayRouter);
 app.use("/", TokenVerification, paywithPayPalRouter);
 app.use("/", TokenVerification, paywithStripeCreateRouter);
-app.use(
-  "/",
-  TokenVerification,
- 
-  paywithStripeEditableCreateRouter
-);
+app.use("/", TokenVerification, paywithStripeEditableCreateRouter);
 ////////////////////////
-
 //////////////////////////
 app.use("/", TokenVerification, CreateAnalysisRouter);
 app.use("/", TokenVerification, CreateForumRouter);
@@ -214,9 +173,6 @@ app.use("/", TokenVerification, DeleteChapterRouter);
 app.use("/", TokenVerification, GetUserRegisteredCoursesRouter);
 app.use("/", TokenVerification, FindTransactionbyIdRouter);
 app.use("/", TokenVerification, GetUserByIdRouter);
-
-const PORT: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
-const uri: string = process.env.DB_URI ? process.env.DB_URI : "";
-
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
+const uri = process.env.DB_URI ? process.env.DB_URI : "";
 ConnectDatabse(app, PORT, uri);
-
