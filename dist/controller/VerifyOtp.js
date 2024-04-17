@@ -1,16 +1,26 @@
 import OTP from "../Models/Otp.js";
+import UserModel from "../Models/User.js";
 // const baseUrl = "https://next-fx-client.vercel.app";
 const baseUrl = "http://localhost:3000";
 const VerifyOtp = async (req, res, next) => {
     const { user, otp } = req.query;
-    console.log(req.query);
-    const isExists = await OTP.findOne({ otp: otp, user: user });
-    if (isExists) {
-        res.redirect(`${baseUrl}/dashboard/${user}}`);
+    try {
+        const isExists = await OTP.findOne({ otp: otp, user: user });
+        if (isExists) {
+            const updatedUser = await UserModel.findOneAndUpdate({ _id: user }, { $set: { isVerified: true } }, { upsert: true });
+            console.log(updatedUser);
+            return res.redirect(`${baseUrl}/dashboard/${user}}`);
+        }
+        return res.status(401).json({
+            status: false,
+            response: "Wrong OTP",
+        });
     }
-    res.status(401).json({
-        status: false,
-        response: "Wrong OTP",
-    });
+    catch (err) {
+        return res.status(500).json({
+            status: false,
+            response: err.message,
+        });
+    }
 };
 export default VerifyOtp;
