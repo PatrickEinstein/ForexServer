@@ -9,8 +9,8 @@ import mailer from "../config/Nodemailer.js";
 const LoginWithEmailAndPassword = async (req, res) => {
     const { email, password } = req.body;
     // console.log({ email, password });
-    // const baseUrl = "https://next-fx-client.vercel.app";
-    const baseUrl = "http://localhost:3000";
+    const baseUrl = "https://next-fx-client.vercel.app";
+   // const baseUrl = "http://localhost:3000";
     try {
         const userFoundWithMail = await UserModel.findOne({ email: email });
         if (userFoundWithMail) {
