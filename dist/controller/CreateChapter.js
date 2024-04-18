@@ -41,7 +41,7 @@ const createChapter = async (req, res, next) => {
             title,
             description,
             link: videoUrl,
-            // script: script,
+            script: script,
             courseId: courseId,
             courseTitle: courseTitle,
         });

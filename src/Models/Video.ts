@@ -27,7 +27,7 @@ const VideoSchema: Schema<IVideo> = new mongoose.Schema(
     },
     script: {
       type: String,
-      required: true,
+      // required: true,
     },
     courseId: {
       type: String,

@@ -7,17 +7,21 @@ const baseUrl = "https://next-fx-client.vercel.app";
 
 const VerifyOtp: RequestHandler = async (req, res, next) => {
   const { user, otp } = req.query;
-
+  console.log(req.query);
   try {
     const isExists = await OTP.findOne({ otp: otp, user: user });
+    console.log(`isExists`, isExists);
     if (isExists) {
       const updatedUser = await UserModel.findOneAndUpdate(
         { _id: user },
         { $set: { isVerified: true } },
         { upsert: true }
       );
-      console.log(updatedUser);
-      return res.redirect(`${baseUrl}/login`);
+      // console.log(updatedUser);
+      return res.status(301).json({
+        link: `${baseUrl}/login`,
+      });
+      // return res.redirect(`${baseUrl}/login`);
     }
     return res.status(401).json({
       status: false,

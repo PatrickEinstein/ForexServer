@@ -9,15 +9,13 @@ import mailer from "../config/Nodemailer.js";
 const LoginWithEmailAndPassword = async (req, res) => {
     const { email, password } = req.body;
     // console.log({ email, password });
-    const baseUrl = "https://next-fx-client.vercel.app";
-    // const baseUrl = "http://localhost:3000";
+    // const baseUrl = "https://next-fx-client.vercel.app";
+    const baseUrl = "http://localhost:3000";
     try {
         const userFoundWithMail = await UserModel.findOne({ email: email });
         if (userFoundWithMail) {
             const isMatch = await bcrypt.compare(password, userFoundWithMail?.password);
-            // console.log(`isMatch::`, isMatch, `foundafterMatch`, userFoundWithMail);
             if (isMatch) {
-                console.log(`isMatch:::`, userFoundWithMail);
                 if (!userFoundWithMail.isVerified) {
                     const { _id } = userFoundWithMail;
                     const otp = Math.trunc(Math.random() * 9000 + 1);
@@ -31,7 +29,6 @@ const LoginWithEmailAndPassword = async (req, res) => {
                     });
                 }
                 else {
-                    // console.log(`isMatchedVerified:::`, userFoundWithMail);
                     const token = jwt.sign({ user: userFoundWithMail.ClientId, token: GetRandomInit(216) }, process.env.JSONKEY, {
                         expiresIn: 18000,
                     });
@@ -50,7 +47,6 @@ const LoginWithEmailAndPassword = async (req, res) => {
             }
         }
         else {
-            // console.log(`notMatched:::`, userFoundWithMail);
             return res.status(401).json({
                 status: false,
                 response: "Email or Password incorrect",
