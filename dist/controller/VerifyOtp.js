@@ -18,7 +18,7 @@ const VerifyOtp = async (req, res, next) => {
         }
         return res.status(401).json({
             status: false,
-            response: "Wrong OTP",
+            response: "Wrong or expired OTP",
         });
     }
     catch (err) {
